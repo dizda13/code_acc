@@ -1,0 +1,42 @@
+import { Component } from '@angular/core';
+
+import { CarPart } from './car-part';
+import { RacingDataService } from './racing-data.service';
+import { CARPARTS } from './mocks';
+
+@Component({
+  selector: 'car-parts',
+  templateUrl: `app/car-parts.component.html`,
+  styleUrls:[`app/car-parts.component.css`]
+})
+
+export class CarPartsComponent {
+  carParts: CarPart[] ;
+
+  constructor(private racingDataService: RacingDataService) { }
+
+  ngOnInit(){
+    this.racingDataService.getCarParts()
+                          .subscribe(carParts=> this.carParts=carParts);
+}
+
+  totalCarParts(){
+    let sum=0;
+    if(Array.isArray(this.carParts)){
+      for(let carPart of this.carParts)
+        sum=sum+carPart.inStock;
+      return sum;
+    }
+  }
+
+  upQuentity(carPart){
+    if(carPart.quentity<carPart.inStock)
+      carPart.quentity++;
+  }
+
+  downQuentity(carPart){
+    if(carPart.quentity>0)
+    carPart.quentity--;
+  }
+
+}
